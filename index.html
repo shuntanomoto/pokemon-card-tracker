@@ -4,6 +4,16 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>ポケカ 相場チェッカー</title>
+
+<!-- PWA -->
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#e3350d">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="ポケカ相場">
+<link rel="apple-touch-icon" href="icon-192.png">
+<link rel="icon" type="image/svg+xml" href="icon.svg">
 <style>
 * { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -524,6 +534,14 @@ body {
     <div class="autocomplete" id="headerDropdown"></div>
   </div>
 </header>
+
+<!-- インストールバナー -->
+<div id="installBanner" style="display:none;position:fixed;bottom:16px;left:50%;transform:translateX(-50%);z-index:999;background:#1a1d27;border:1px solid #e3350d;border-radius:12px;padding:12px 18px;align-items:center;gap:12px;box-shadow:0 4px 24px rgba(0,0,0,0.5);min-width:280px">
+  <span style="font-size:1.2rem">📲</span>
+  <span style="font-size:0.88rem;color:#e8eaf0;flex:1">ホーム画面に追加してオフラインでも使えます</span>
+  <button onclick="installApp()" style="padding:6px 14px;background:#e3350d;color:white;border:none;border-radius:8px;font-weight:700;cursor:pointer;font-size:0.82rem">追加</button>
+  <button onclick="document.getElementById('installBanner').style.display='none'" style="background:none;border:none;color:#6b7280;cursor:pointer;font-size:1rem">✕</button>
+</div>
 
 <!-- MAIN -->
 <div class="main">
@@ -1258,6 +1276,37 @@ window.addEventListener('DOMContentLoaded', () => {
     `<span class="tag" onclick="showDetail(${c.id})">${c.name}</span>`
   ).join('');
 });
+</script>
+
+<script>
+// Service Worker 登録
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('sw.js')
+      .then(() => console.log('SW registered'))
+      .catch(e => console.log('SW error', e));
+  });
+}
+
+// インストールバナー
+let deferredPrompt;
+window.addEventListener('beforeinstallprompt', e => {
+  e.preventDefault();
+  deferredPrompt = e;
+  const banner = document.getElementById('installBanner');
+  if (banner) banner.style.display = 'flex';
+});
+
+function installApp() {
+  if (deferredPrompt) {
+    deferredPrompt.prompt();
+    deferredPrompt.userChoice.then(() => {
+      deferredPrompt = null;
+      const banner = document.getElementById('installBanner');
+      if (banner) banner.style.display = 'none';
+    });
+  }
+}
 </script>
 </body>
 </html>
