@@ -996,40 +996,203 @@ const SHOPS = [
 
 // 英語名マッピング (Pokemon TCG API用)
 const EN_NAME = {
-  'リザードンex':    'Charizard ex',
-  'ピカチュウex':    'Pikachu ex',
-  'ミュウex':        'Mew ex',
-  'ルギアVSTAR':     'Lugia VSTAR',
-  'マリィ':          'Marnie',
-  'ゲンガーex':      'Gengar ex',
-  'アルセウスVSTAR': 'Arceus VSTAR',
-  'テツノカイナex':  'Iron Hands ex',
-  'カイリューV':     'Dragonite V',
-  'ヒトカゲ':        'Charmander',
-  'ソウブレイズex':  'Skeledirge ex',
-  'ヒスイゾロアークV':'Hisuian Zoroark V',
-  'ハラバリーex':    'Bellibolt ex',
-  'フワンテ':        'Drifloon',
-  'イーブイ':        'Eevee',
+  // SV1
+  'コライドンex':'Koraidon ex','ミライドンex':'Miraidon ex','ネモ':'Nemona',
+  'チリ':'Arven','ハラバリーex':'Bellibolt ex','ミモザ':'Jacq',
+  'コライドンex(SR)':'Koraidon ex','ミライドンex(SR)':'Miraidon ex',
+  // SV2
+  'ガブリアスex':'Garchomp ex','ロトムex':'Rotom ex','バシャーモex':'Blaziken ex',
+  'トドロクツキex':'Roaring Moon ex','ミズゴロウ':'Mudkip','アブリボン':'Ribombee',
+  // SV2a
+  'リザードンex':'Charizard ex','ピカチュウex':'Pikachu ex','ミュウex':'Mew ex',
+  'フシギバナex':'Venusaur ex','カメックスex':'Blastoise ex','ゲンガーex':'Gengar ex',
+  'ヒトカゲ':'Charmander','フシギダネ':'Bulbasaur','ゼニガメ':'Squirtle',
+  'ピカチュウ':'Pikachu','イーブイ':'Eevee','ミュウ(SAR)':'Mew',
+  // SV3
+  'サーナイトex':'Gardevoir ex','ヒカリ':'Dawn','ボスの指令(ヒカリ)':'Boss\'s Orders',
+  'マフォクシーex':'Delphox ex','ドラパルトex':'Dragapult ex',
+  // SV3a
+  'ソウブレイズex':'Skeledirge ex','グルーシャ':'Grusha','ドドゲザンex':'Kingambit ex',
+  // SV4
+  'テツノカイナex':'Iron Hands ex','テツノブジンex':'Iron Valiant ex',
+  'テツノワダチex':'Iron Treads ex','テツノイサハex':'Iron Leaves ex',
+  'トドロクツキex(SAR)':'Roaring Moon ex','フワンテ':'Drifloon',
+  // SV4a
+  'リザードンex(SV4a)':'Charizard ex','ピカチュウex(SV4a)':'Pikachu ex',
+  'サーナイトex(SV4a)':'Gardevoir ex','ガブリアスex(SV4a)':'Garchomp ex',
+  'ルカリオex(SV4a)':'Lucario ex',
+  // SV5M
+  'ゼイユ':'Iono','ペパー':'Penny','ブリムオンex':'Hatterene ex',
+  'ゴルーグex':'Golurk ex',
+  // SV5K
+  'ガオガエンex':'Incineroar ex','モルペコex':'Morpeko ex',
+  'ネモ(SV5K)':'Nemona',
+  // SV6
+  'オーガポンex(礎)':'Ogerpon ex','オーガポンex(水)':'Ogerpon ex',
+  'オーガポンex(炎)':'Ogerpon ex','オーガポンex(草)':'Ogerpon ex',
+  'ニャオハex':'Sprigatito ex','ハラバリーex(SV6)':'Bellibolt ex',
+  // SV6a
+  'ブラッキーex':'Umbreon ex','テツノコウベex':'Iron Crown ex','カーリーex':'Terapagos ex',
+  // SV7
+  'テラパゴスex':'Terapagos ex','ライコウex':'Raikou ex','サンダーex':'Zapdos ex',
+  // SV8
+  'ライチュウex':'Raichu ex','ゼクロムex':'Zekrom ex','レシラムex':'Reshiram ex',
+  'アーマーガアex':'Corviknight ex',
+  // SV8a
+  'ルカリオex':'Lucario ex','バンギラスex':'Tyranitar ex','ガブリアスex(SV8a)':'Garchomp ex',
+  'カイリューex':'Dragonite ex',
+  // SWSH
+  'ルギアVSTAR':'Lugia VSTAR','マリィ':'Marnie','アルセウスVSTAR':'Arceus VSTAR',
+  'カイリューV':'Dragonite V','ヒスイゾロアークV':'Hisuian Zoroark V',
+  'ヒスイゾロアークVSTAR':'Hisuian Zoroark VSTAR','ムゲンダイナVMAX':'Eternatus VMAX',
+  'イーブイヒーローズ':'Eevee Heroes','ジュナイパーV':'Decidueye V',
+  'レックウザVMAX':'Rayquaza VMAX','ディアルガVSTAR':'Dialga VSTAR',
+  'パルキアVSTAR':'Palkia VSTAR',
 };
 
-// ベースデータ
+// 価格生成ヘルパー (市場相場から各店舗価格を自動計算)
+function mp(m) {
+  const r = v => Math.round(v / 10) * 10;
+  return {
+    mercari:    { sell: r(m),        buy: r(m * 0.90) },
+    snidan:     { sell: r(m * 1.05), buy: r(m * 1.05 * 0.92) },
+    cs_okayama: { sell: r(m * 1.22), buy: r(m * 0.68) },
+    bookoff:    { sell: r(m * 1.05), buy: r(m * 0.40) },
+    furuhon:    { sell: r(m * 1.08), buy: r(m * 0.45) },
+  };
+}
+
+// ベースデータ (全弾 主要カード)
 const BASE_CARDS = [
-  { id:1,  name:'リザードンex',    set:'黒炎の支配者',             rarity:'SAR', prices:{ mercari:{sell:11500,buy:10350}, snidan:{sell:12000,buy:11040}, cs_okayama:{sell:13000,buy:8500},  bookoff:{sell:10000,buy:5000}, furuhon:{sell:10500,buy:5500} } },
-  { id:2,  name:'ピカチュウex',    set:'151',                      rarity:'SAR', prices:{ mercari:{sell:7500,buy:6750},  snidan:{sell:7800,buy:7176},  cs_okayama:{sell:8500,buy:5500},   bookoff:{sell:6500,buy:3000},  furuhon:{sell:7000,buy:3500} } },
-  { id:3,  name:'ミュウex',        set:'151',                      rarity:'SAR', prices:{ mercari:{sell:4500,buy:4050},  snidan:{sell:4700,buy:4324},  cs_okayama:{sell:5000,buy:3200},   bookoff:{sell:4000,buy:1800},  furuhon:{sell:4200,buy:2000} } },
-  { id:4,  name:'ルギアVSTAR',     set:'白銀のランス',             rarity:'SAR', prices:{ mercari:{sell:16000,buy:14400},snidan:{sell:16500,buy:15180},cs_okayama:{sell:18000,buy:12000}, bookoff:{sell:14000,buy:7000}, furuhon:{sell:15000,buy:7500} } },
-  { id:5,  name:'マリィ',          set:'シールド',                 rarity:'SR',  prices:{ mercari:{sell:8500,buy:7650},  snidan:{sell:8800,buy:8096},  cs_okayama:{sell:9500,buy:6000},   bookoff:{sell:7500,buy:3500},  furuhon:{sell:7800,buy:3800} } },
-  { id:6,  name:'ゲンガーex',      set:'サイバージャッジ',         rarity:'SAR', prices:{ mercari:{sell:3600,buy:3240},  snidan:{sell:3800,buy:3496},  cs_okayama:{sell:4000,buy:2500},   bookoff:{sell:3200,buy:1200},  furuhon:{sell:3400,buy:1500} } },
-  { id:7,  name:'アルセウスVSTAR', set:'スターバース',             rarity:'UR',  prices:{ mercari:{sell:7000,buy:6300},  snidan:{sell:7300,buy:6716},  cs_okayama:{sell:8000,buy:5000},   bookoff:{sell:6300,buy:2800},  furuhon:{sell:6500,buy:3000} } },
-  { id:8,  name:'テツノカイナex',  set:'パラドックスリフト',       rarity:'SAR', prices:{ mercari:{sell:6200,buy:5580},  snidan:{sell:6500,buy:5980},  cs_okayama:{sell:7000,buy:4500},   bookoff:{sell:5500,buy:2500},  furuhon:{sell:5800,buy:2800} } },
-  { id:9,  name:'カイリューV',     set:'蒼空ストリーム',           rarity:'SR',  prices:{ mercari:{sell:4500,buy:4050},  snidan:{sell:4700,buy:4324},  cs_okayama:{sell:5000,buy:3000},   bookoff:{sell:4000,buy:1500},  furuhon:{sell:4200,buy:1800} } },
-  { id:10, name:'ヒトカゲ',        set:'151',                      rarity:'CHR', prices:{ mercari:{sell:2600,buy:2340},  snidan:{sell:2700,buy:2484},  cs_okayama:{sell:2800,buy:1500},   bookoff:{sell:2200,buy:800},   furuhon:{sell:2400,buy:900}  } },
-  { id:11, name:'ソウブレイズex',  set:'レイジングサーフ',         rarity:'SAR', prices:{ mercari:{sell:4000,buy:3600},  snidan:{sell:4200,buy:3864},  cs_okayama:{sell:4500,buy:2800},   bookoff:{sell:3600,buy:1400},  furuhon:{sell:3800,buy:1600} } },
-  { id:12, name:'ヒスイゾロアークV',set:'タイムゲイザー',          rarity:'SAR', prices:{ mercari:{sell:3400,buy:3060},  snidan:{sell:3600,buy:3312},  cs_okayama:{sell:3800,buy:2200},   bookoff:{sell:3000,buy:1100},  furuhon:{sell:3200,buy:1300} } },
-  { id:13, name:'ハラバリーex',    set:'スカーレット&バイオレット',rarity:'SAR', prices:{ mercari:{sell:2700,buy:2430},  snidan:{sell:2800,buy:2576},  cs_okayama:{sell:3000,buy:1800},   bookoff:{sell:2400,buy:900},   furuhon:{sell:2500,buy:1000} } },
-  { id:14, name:'フワンテ',        set:'パラドックスリフト',       rarity:'RR',  prices:{ mercari:{sell:800,buy:720},    snidan:{sell:850,buy:782},    cs_okayama:{sell:900,buy:500},     bookoff:{sell:700,buy:200},    furuhon:{sell:750,buy:250}   } },
-  { id:15, name:'イーブイ',        set:'151',                      rarity:'CHR', prices:{ mercari:{sell:1800,buy:1620},  snidan:{sell:1900,buy:1748},  cs_okayama:{sell:2000,buy:1200},   bookoff:{sell:1600,buy:600},   furuhon:{sell:1700,buy:700}  } },
+  // ── SV1 スカーレット&バイオレット ──
+  { id:101, name:'コライドンex',       set:'スカーレット&バイオレット', rarity:'SAR', prices:mp(3200)  },
+  { id:102, name:'ミライドンex',       set:'スカーレット&バイオレット', rarity:'SAR', prices:mp(3200)  },
+  { id:103, name:'ネモ',               set:'スカーレット&バイオレット', rarity:'SAR', prices:mp(8500)  },
+  { id:104, name:'チリ',               set:'スカーレット&バイオレット', rarity:'SAR', prices:mp(4500)  },
+  { id:105, name:'ハラバリーex',       set:'スカーレット&バイオレット', rarity:'SAR', prices:mp(2800)  },
+  { id:106, name:'ミモザ',             set:'スカーレット&バイオレット', rarity:'SAR', prices:mp(3000)  },
+  { id:107, name:'コライドンex(SR)',   set:'スカーレット&バイオレット', rarity:'SR',  prices:mp(1500)  },
+  { id:108, name:'ミライドンex(SR)',   set:'スカーレット&バイオレット', rarity:'SR',  prices:mp(1500)  },
+
+  // ── SV2 クレイバースト ──
+  { id:201, name:'ガブリアスex',       set:'クレイバースト',            rarity:'SAR', prices:mp(3500)  },
+  { id:202, name:'ロトムex',           set:'クレイバースト',            rarity:'SAR', prices:mp(3000)  },
+  { id:203, name:'バシャーモex',       set:'クレイバースト',            rarity:'SAR', prices:mp(2800)  },
+  { id:204, name:'トドロクツキex',     set:'クレイバースト',            rarity:'SAR', prices:mp(4000)  },
+  { id:205, name:'ミズゴロウ',         set:'クレイバースト',            rarity:'CHR', prices:mp(2200)  },
+  { id:206, name:'アブリボン',         set:'クレイバースト',            rarity:'RR',  prices:mp(600)   },
+
+  // ── SV2a 151 ──
+  { id:301, name:'リザードンex',       set:'151',                       rarity:'SAR', prices:mp(11500) },
+  { id:302, name:'ピカチュウex',       set:'151',                       rarity:'SAR', prices:mp(7500)  },
+  { id:303, name:'ミュウex',           set:'151',                       rarity:'SAR', prices:mp(4500)  },
+  { id:304, name:'フシギバナex',       set:'151',                       rarity:'SAR', prices:mp(3000)  },
+  { id:305, name:'カメックスex',       set:'151',                       rarity:'SAR', prices:mp(3500)  },
+  { id:306, name:'ゲンガーex',         set:'151',                       rarity:'SAR', prices:mp(3500)  },
+  { id:307, name:'ミュウ(SAR)',        set:'151',                       rarity:'SAR', prices:mp(5000)  },
+  { id:308, name:'ヒトカゲ',           set:'151',                       rarity:'CHR', prices:mp(2500)  },
+  { id:309, name:'フシギダネ',         set:'151',                       rarity:'CHR', prices:mp(1500)  },
+  { id:310, name:'ゼニガメ',           set:'151',                       rarity:'CHR', prices:mp(1500)  },
+  { id:311, name:'ピカチュウ',         set:'151',                       rarity:'CHR', prices:mp(2000)  },
+  { id:312, name:'イーブイ',           set:'151',                       rarity:'CHR', prices:mp(1800)  },
+  { id:313, name:'ヤドン',             set:'151',                       rarity:'CHR', prices:mp(1200)  },
+  { id:314, name:'メタモン',           set:'151',                       rarity:'CHR', prices:mp(2000)  },
+  { id:315, name:'カビゴン',           set:'151',                       rarity:'CHR', prices:mp(1500)  },
+
+  // ── SV3 黒炎の支配者 ──
+  { id:401, name:'リザードンex',       set:'黒炎の支配者',              rarity:'SAR', prices:mp(12500) },
+  { id:402, name:'サーナイトex',       set:'黒炎の支配者',              rarity:'SAR', prices:mp(3200)  },
+  { id:403, name:'ドラパルトex',       set:'黒炎の支配者',              rarity:'SAR', prices:mp(4000)  },
+  { id:404, name:'マフォクシーex',     set:'黒炎の支配者',              rarity:'SAR', prices:mp(2500)  },
+  { id:405, name:'ヒカリ',             set:'黒炎の支配者',              rarity:'SAR', prices:mp(5000)  },
+  { id:406, name:'ボスの指令(ヒカリ)', set:'黒炎の支配者',              rarity:'SAR', prices:mp(4500)  },
+  { id:407, name:'サーナイトex',       set:'黒炎の支配者',              rarity:'SR',  prices:mp(1500)  },
+  { id:408, name:'ドラパルトex',       set:'黒炎の支配者',              rarity:'SR',  prices:mp(1800)  },
+
+  // ── SV3a レイジングサーフ ──
+  { id:501, name:'ソウブレイズex',     set:'レイジングサーフ',          rarity:'SAR', prices:mp(4000)  },
+  { id:502, name:'ドドゲザンex',       set:'レイジングサーフ',          rarity:'SAR', prices:mp(2500)  },
+  { id:503, name:'グルーシャ',         set:'レイジングサーフ',          rarity:'SAR', prices:mp(5000)  },
+  { id:504, name:'ロトムex',           set:'レイジングサーフ',          rarity:'SAR', prices:mp(2800)  },
+  { id:505, name:'ソウブレイズex',     set:'レイジングサーフ',          rarity:'SR',  prices:mp(1200)  },
+
+  // ── SV4 パラドックスリフト ──
+  { id:601, name:'テツノカイナex',     set:'パラドックスリフト',        rarity:'SAR', prices:mp(6200)  },
+  { id:602, name:'テツノブジンex',     set:'パラドックスリフト',        rarity:'SAR', prices:mp(5500)  },
+  { id:603, name:'テツノワダチex',     set:'パラドックスリフト',        rarity:'SAR', prices:mp(3000)  },
+  { id:604, name:'テツノイサハex',     set:'パラドックスリフト',        rarity:'SAR', prices:mp(3500)  },
+  { id:605, name:'トドロクツキex(SAR)',set:'パラドックスリフト',        rarity:'SAR', prices:mp(4500)  },
+  { id:606, name:'フワンテ',           set:'パラドックスリフト',        rarity:'RR',  prices:mp(800)   },
+  { id:607, name:'テツノカイナex',     set:'パラドックスリフト',        rarity:'SR',  prices:mp(2000)  },
+  { id:608, name:'テツノブジンex',     set:'パラドックスリフト',        rarity:'SR',  prices:mp(1800)  },
+
+  // ── SV4a シャイニートレジャーex ──
+  { id:701, name:'リザードンex(SV4a)', set:'シャイニートレジャーex',    rarity:'SAR', prices:mp(25000) },
+  { id:702, name:'ピカチュウex(SV4a)', set:'シャイニートレジャーex',    rarity:'SAR', prices:mp(15000) },
+  { id:703, name:'サーナイトex(SV4a)', set:'シャイニートレジャーex',    rarity:'SAR', prices:mp(8000)  },
+  { id:704, name:'ガブリアスex(SV4a)', set:'シャイニートレジャーex',    rarity:'SAR', prices:mp(5000)  },
+  { id:705, name:'ルカリオex(SV4a)',   set:'シャイニートレジャーex',    rarity:'SAR', prices:mp(7000)  },
+  { id:706, name:'ドラパルトex',       set:'シャイニートレジャーex',    rarity:'SAR', prices:mp(6000)  },
+
+  // ── SV5M サイバージャッジ ──
+  { id:801, name:'ゲンガーex',         set:'サイバージャッジ',          rarity:'SAR', prices:mp(3600)  },
+  { id:802, name:'ブリムオンex',       set:'サイバージャッジ',          rarity:'SAR', prices:mp(2500)  },
+  { id:803, name:'ゼイユ',             set:'サイバージャッジ',          rarity:'SAR', prices:mp(8500)  },
+  { id:804, name:'ペパー',             set:'サイバージャッジ',          rarity:'SAR', prices:mp(4000)  },
+  { id:805, name:'ゴルーグex',         set:'サイバージャッジ',          rarity:'SAR', prices:mp(2000)  },
+
+  // ── SV5K ワイルドフォース ──
+  { id:901, name:'ガオガエンex',       set:'ワイルドフォース',          rarity:'SAR', prices:mp(3500)  },
+  { id:902, name:'モルペコex',         set:'ワイルドフォース',          rarity:'SAR', prices:mp(2500)  },
+  { id:903, name:'ネモ(SV5K)',         set:'ワイルドフォース',          rarity:'SAR', prices:mp(6000)  },
+  { id:904, name:'ガオガエンex',       set:'ワイルドフォース',          rarity:'SR',  prices:mp(1500)  },
+
+  // ── SV6 変幻の仮面 ──
+  { id:1001, name:'オーガポンex(礎)',  set:'変幻の仮面',                rarity:'SAR', prices:mp(8000)  },
+  { id:1002, name:'オーガポンex(水)',  set:'変幻の仮面',                rarity:'SAR', prices:mp(5000)  },
+  { id:1003, name:'オーガポンex(炎)',  set:'変幻の仮面',                rarity:'SAR', prices:mp(4500)  },
+  { id:1004, name:'オーガポンex(草)',  set:'変幻の仮面',                rarity:'SAR', prices:mp(4000)  },
+  { id:1005, name:'ニャオハex',        set:'変幻の仮面',                rarity:'SAR', prices:mp(3000)  },
+  { id:1006, name:'ハラバリーex(SV6)', set:'変幻の仮面',                rarity:'SAR', prices:mp(2000)  },
+  { id:1007, name:'オーガポンex(礎)',  set:'変幻の仮面',                rarity:'SR',  prices:mp(2500)  },
+
+  // ── SV6a ナイトワンダラー ──
+  { id:1101, name:'ブラッキーex',      set:'ナイトワンダラー',          rarity:'SAR', prices:mp(6500)  },
+  { id:1102, name:'テツノコウベex',    set:'ナイトワンダラー',          rarity:'SAR', prices:mp(3500)  },
+  { id:1103, name:'カーリーex',        set:'ナイトワンダラー',          rarity:'SAR', prices:mp(4000)  },
+  { id:1104, name:'ブラッキーex',      set:'ナイトワンダラー',          rarity:'SR',  prices:mp(2000)  },
+
+  // ── SV7 ステラミラクル ──
+  { id:1201, name:'テラパゴスex',      set:'ステラミラクル',            rarity:'SAR', prices:mp(7000)  },
+  { id:1202, name:'ライコウex',        set:'ステラミラクル',            rarity:'SAR', prices:mp(4000)  },
+  { id:1203, name:'サンダーex',        set:'ステラミラクル',            rarity:'SAR', prices:mp(3500)  },
+  { id:1204, name:'テラパゴスex',      set:'ステラミラクル',            rarity:'SR',  prices:mp(2200)  },
+
+  // ── SV8 超電ブレイカー ──
+  { id:1301, name:'ゼクロムex',        set:'超電ブレイカー',            rarity:'SAR', prices:mp(9000)  },
+  { id:1302, name:'レシラムex',        set:'超電ブレイカー',            rarity:'SAR', prices:mp(5500)  },
+  { id:1303, name:'ライチュウex',      set:'超電ブレイカー',            rarity:'SAR', prices:mp(5000)  },
+  { id:1304, name:'アーマーガアex',    set:'超電ブレイカー',            rarity:'SAR', prices:mp(3000)  },
+  { id:1305, name:'ゼクロムex',        set:'超電ブレイカー',            rarity:'SR',  prices:mp(3000)  },
+
+  // ── SV8a バトルパートナーズ ──
+  { id:1401, name:'ルカリオex',        set:'バトルパートナーズ',        rarity:'SAR', prices:mp(6500)  },
+  { id:1402, name:'バンギラスex',      set:'バトルパートナーズ',        rarity:'SAR', prices:mp(4000)  },
+  { id:1403, name:'ガブリアスex(SV8a)',set:'バトルパートナーズ',        rarity:'SAR', prices:mp(3500)  },
+  { id:1404, name:'カイリューex',      set:'バトルパートナーズ',        rarity:'SAR', prices:mp(4500)  },
+  { id:1405, name:'ルカリオex',        set:'バトルパートナーズ',        rarity:'SR',  prices:mp(2000)  },
+
+  // ── 剣盾 (SWSH) 人気カード ──
+  { id:2001, name:'ルギアVSTAR',       set:'白銀のランス',              rarity:'SAR', prices:mp(16000) },
+  { id:2002, name:'マリィ',            set:'シールド',                  rarity:'SR',  prices:mp(8500)  },
+  { id:2003, name:'アルセウスVSTAR',   set:'スターバース',              rarity:'UR',  prices:mp(7000)  },
+  { id:2004, name:'カイリューV',       set:'蒼空ストリーム',            rarity:'SR',  prices:mp(4500)  },
+  { id:2005, name:'ヒスイゾロアークV', set:'タイムゲイザー',            rarity:'SAR', prices:mp(3400)  },
+  { id:2006, name:'ヒスイゾロアークVSTAR',set:'タイムゲイザー',        rarity:'SAR', prices:mp(4000)  },
+  { id:2007, name:'ムゲンダイナVMAX',  set:'仰天のボルテッカー',        rarity:'SR',  prices:mp(3500)  },
+  { id:2008, name:'レックウザVMAX',    set:'蒼空ストリーム',            rarity:'SAR', prices:mp(5000)  },
+  { id:2009, name:'ディアルガVSTAR',   set:'タイムゲイザー',            rarity:'SAR', prices:mp(3000)  },
+  { id:2010, name:'パルキアVSTAR',     set:'スペースジャグラー',        rarity:'SAR', prices:mp(3000)  },
 ];
 
 // ================================================================
